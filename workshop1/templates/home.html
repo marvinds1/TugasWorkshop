@@ -1,0 +1,162 @@
+{% extends 'layout.html' %}
+{% block title %} Home {% endblock %}
+{% block body %}
+<div class="container">
+    <div class="starter-template">
+        <h1>Tampilkan Data</h1>
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Tambah
+            Data</button>
+        <p></p>
+        <table class="table table-bordered" style="background-color:rgb(236, 246, 252);">
+            <thead class="thead-dark">
+                <tr>
+                    <td><b>No</b></td>
+                    <td><b>Nama</b></td>
+                    <td><b>Harga</b></td>
+                    <td><b>Rating</b></td>
+                    <td><b>Aksi</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in computers %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>Rp {{ row.4 }}</td>
+                    <td>{{ row.8 }}</td>
+                    <td>
+                        <a href="#!" class="btn btn-warning btn-xs" data-toggle="modal"
+                            data-target="#modalEdit{{ row.0 }}">Edit</a>
+                        <a href="/hapus/{{ row.3 }}" class="btn btn-danger btn-xs"
+                            onclick="return confirm('Yakin ingin hapus?')">Hapus</a>
+                        <a href="#!" class="btn btn-success btn-xs" data-toggle="modal"
+                            data-target="#modalDetails{{ row.0 }}">Details</a>
+                    </td>
+                </tr>
+                <!-- Modal -->
+                <div id="modalEdit{{ row.0 }}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Data</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ url_for('update') }}" method="POST">
+                                    <div class="form-group">
+                                        <label>Nama:</label>
+                                        <input type="hidden" name="id" value="{{ row.0 }}">
+                                        <input type="text" class="form-control" name="nama" value="{{ row.3 }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Harga:</label>
+                                        <input type="text" class="form-control" name="harga" value="{{ row.4 }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Weight:</label>
+                                        <input type="text" class="form-control" name="berat" value="{{ row.6 }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description:</label>
+                                        <input type="text" class="form-control" name="desc" value="{{ row.7 }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-warning" type="submit">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal -->
+                <div id="modalDetails{{ row.0 }}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Details</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ url_for('details') }}" method="POST">
+                                    <div class="form-group">
+                                        <img src="{{ row.2 }}" class="rounded mx-auto d-block" style="width:200px;height:200px;"> </br>
+                                        <label>Nama: {{ row.3 }}</label> </br>
+                                        <label>Harga: {{ row.4 }}</label> </br>
+                                        <label>Total buy: {{ row.5 }}</label> </br>
+                                        <label>Weight: {{ row.6 }}</label> </br>
+                                        <label>Rating: {{ row.8 }}</label> </br>
+                                        <label>Description: {{ row.7 }}</label> </br>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+                {% else %}
+                <tr>
+                    <td colspan="3">Unbelievable. No entries here so far</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Tambah Data</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('simpan') }}" method="POST">
+                    <div class="form-group">
+                        <label>Link foto:</label>
+                        <input type="text" class="form-control" name="linkfoto">
+                    </div>
+                    <div class="form-group">
+                        <label>Nama:</label>
+                        <input type="text" class="form-control" name="nama">
+                    </div>
+                    <div class="form-group">
+                        <label>Harga (dalam rupiah):</label>
+                        <input type="text" class="form-control" name="harga">
+                    </div>
+                    <div class="form-group">
+                        <label>Total Buy:</label>
+                        <input type="text" class="form-control" name="beli">
+                    </div>
+                    <div class="form-group">
+                        <label>Berat (dalam gram):</label>
+                        <input type="text" class="form-control" name="berat">
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi:</label>
+                        <input type="text" class="form-control" name="deskripsi">
+                    </div>
+                    <div class="form-group">
+                        <label>Rating (1-5 boleh desimal):</label>
+                        <input type="text" class="form-control" name="rating">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Simpan</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+{% endblock %}
