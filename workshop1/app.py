@@ -11,7 +11,7 @@ mysql = MySQL(app)
 @app.route('/')
 def home():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM product_details ORDER BY dates ASC")
+    cur.execute("SELECT * FROM product_details ORDER BY dates DESC LIMIT 10")
     rv = cur.fetchall()
     cur.close()
     return render_template('home.html', computers=rv)
