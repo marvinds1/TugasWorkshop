@@ -16,15 +16,8 @@ def home():
     cur.close()
     return render_template('home.html', data=rv)
 
-@app.route('/simpan',methods=["POST"])
-def simpan():
-    link = request.form['linkfoto']
-    nama = request.form['nama']
-    harga = request.form['harga']
-    beli = request.form['beli']
-    berat = request.form['berat']
-    desc = request.form['deskripsi']
-    rate = request.form['rating']
+@app.route('/details/<string:id_data>', methods=["GET"])
+def details(id_data):
     cur = mysql.connection.cursor()
     cur.execute("INSERT INTO product_details VALUES (NULL, now(), %s,%s,%s,%s,%s,%s,%s)",(link,nama,harga,beli,berat,desc,rate,))
     mysql.connection.commit()
