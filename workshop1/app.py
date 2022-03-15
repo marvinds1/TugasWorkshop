@@ -14,7 +14,7 @@ def home():
     cur.execute("SELECT * FROM product_details ORDER BY dates DESC LIMIT 10")
     rv = cur.fetchall()
     cur.close()
-    return render_template('home.html', computers=rv)
+    return render_template('home.html', data=rv)
 
 @app.route('/simpan',methods=["POST"])
 def simpan():
