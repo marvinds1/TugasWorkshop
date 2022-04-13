@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+{% block title %} Home {% endblock %}
+{% block body %}
+{% for col in user %}
+<div class="container" style="margin:90px">
+<div class="padding">
+    <div class="d-flex justify-content-center" style="margin: 0px 0px;">
+        <div class="col-xl-6 col-md-12">
+            <div class="card user-card-full">
+                <div class="row m-l-0 m-r-0">
+                    <div class="col-sm-4 bg-c-lite-green user-profile">
+                        <div class="card-block text-center">
+                            <div class="m-b-25"> <img src="https://img.icons8.com/bubbles/100/000000/user.png" class="img-radius" alt="User-Profile-Image"> </div>
+                            <h6 class="f-w-600">{{ col.0 }}</h6>
+                            <p>{{ col.2 }}</p> <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
+                            <a href="#!" class="btn btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit Profile</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="card-block">
+                            <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="m-b-10 f-w-600">Email</p>
+                                    <h6 class="text-muted f-w-400">{{ col.3 }}</h6>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p class="m-b-10 f-w-600">Phone</p>
+                                    <h6 class="text-muted f-w-400">{{ col.6 }}</h6>
+                                </div>
+                            </div>
+                            <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">More Details</h6>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="m-b-10 f-w-600">Address</p>
+                                    <h6 class="text-muted f-w-400">{{ col.5 }}</h6>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p class="m-b-10 f-w-600">Birth Date</p>
+                                    <h6 class="text-muted f-w-400">{{ col.7 }}</h6>
+                                </div>
+                            </div>
+                            <a href="/prodlist" class="btn btn-warning btn-xs">My Product</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+        </div>
+    </div>
+    <div id="modalEdit" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Data</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('update') }}" method="POST">
+                        <div class="form-group">
+                            <label>Nama:</label>
+                            <input type="hidden" name="id" value="{{ col.1 }}">
+                            <input type="text" class="form-control" name="nama" value="{{ col.0 }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Username:</label>
+                            <input type="text" class="form-control" name="nama" value="{{ col.2 }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="text" class="form-control" name="email" value="{{ col.3 }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat:</label>
+                            <input type="text" class="form-control" name="alamat" value="{{ col.5 }}">
+                        </div>
+                        <div class="form-group">
+                            <label>No Hp:</label>
+                            <input type="text" class="form-control" name="hp" value="{{ col.6 }}">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-warning" type="submit">Update</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endfor %}
+{% endblock %}

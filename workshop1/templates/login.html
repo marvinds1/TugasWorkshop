@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-box-inner">
+        <div class="background">
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <form id="login" action="/login" method="POST">
+            <h2 class="login-regist">Login</h2>
+            <label for="username">Username</label>
+            {% if username %}
+            <div class="textbox"><input type="text" placeholder="Username" name="username" value="{{ username }}"></div>
+            {% else %}
+            <div class="textbox"><input type="text" placeholder="Username" name="username"></div>
+            {% endif %}
+            <label for="password">Password</label>
+            <div class="textbox"><input type="password" placeholder="Password" name="password"></div>
+            {% if msg %}
+            {{msg}}
+            {% endif %}
+            <div><a href="/forget password">Forget Password</a></div>
+            <input class="btn" type="submit" value="Sign In">
+            <div class="additional-button">
+                <div>Don't Have an account? <a href="/register">Create here</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block title %} Home {% endblock %}
+{% block body %}
+{% include 'header.html' %}
+<!-- /.container -->
+<div class="container-fluid" style="margin-top: 50px; ">
+    <div class="text-center"> 
+        <h2>Produk Terbaru</h2>
+    {% for us in user %}
+    <a class="link-dark text-decoration-none" href="/detailprofile" data-bs-toogle="tooltip" title="Click for Profile Details">
+        Welcome {{ us.0 }}</a><br><br>
+    </div>  
+    <div class="row g-3">
+        {% for col in data %}
+        <div class="col-3">
+            <div class="card mx-auto" style="width: 18rem;">
+                <img src="{{ col.4 }}" class="card-img-top img-fluid" alt="...">
+                <div class="card-body">
+                    <a href="/details/{{ col.5 }}" class="link-dark text-decoration-none" data-bs-toogle="tooltip"
+                        data-bs-placement="top" title="{{ col.5 }}">
+                        <h5 class="card-title text-truncate">{{ col.5 }}</h5>
+                    </a>
+                    <p class="card-text">Rp {{ col.6 }}<br></p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/details/{{ col.5 }}" class="btn btn-dark">Details</a>
+                    </div>
+
+                </div>
+                <div class="card-footer text-muted text-end">
+                    <a>{{ col.10 }}/5</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+    </div>
+    <h3>Unbelievable. No entries here so far</h3>
+    {% endfor %}
+    {% endfor %}
+</diV>
+{% endblock %}
