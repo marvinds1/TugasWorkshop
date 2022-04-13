@@ -8,50 +8,61 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
 </head>
 <body>
-    <div class="registration-box-outer">
-        <div class="registration-box-inner">
-            <h1>Registration</h1>
-            <form action="/register" method="POST">
-                {% if name %}
-                <div class="textbox"><input type="text" placeholder="Name" name="name" value="{{name}}"></div>
-                {% else %}
-                <div class="textbox"><input type="text" placeholder="Name" name="name"></div>
-                {% endif %}
-                {% if username %}
-                <div class="textbox"><input type="text" placeholder="Username" name="username" value="{{username}}"></div>
-                {% else %}
-                <div class="textbox"><input type="text" placeholder="Username" name="username"></div>
-                {% endif %}
-                {% if email %}
-                <div class="textbox"><input type="email" placeholder="Email Id" name="email" value="{{email}}"></div>
-                {% else %}
-                <div class="textbox"><input type="email" placeholder="Email Id" name="email"></div>
-                {% endif %}
-                {% if alamat %}
-                <div class="textbox"><input type="text" placeholder="Alamat" name="alamat" value="{{alamat}}"></div>
-                {% else %}
-                <div class="textbox"><input type="text" placeholder="Alamat" name="alamat"></div>
-                {% endif %}
-                {% if nohp %}
-                <div class="textbox"><input type="text" placeholder="No. HP" name="nohp" value="{{nohp}}"></div>
-                {% else %}
-                <div class="textbox"><input type="text" placeholder="No. HP" name="nohp"></div>
-                {% endif %}
-                {% if lahiruser %}
-                <div class="textbox"><input type="date" placeholder="Tanggal Lahir" name="birthdate" value="{{birthdate}}"></div>
-                {% else %}
-                <div class="textbox"><input type="date" placeholder="birthdate" name="birthdate"></div>
-                {% endif %}
-                <div class="textbox"><input type="password" placeholder="Password" name="password"></div>
-                {% if msg %}
-                {{ msg }}
-                {% endif %}
-                <input class="btn" type="submit" value="Sign Up">
-            </form>
-            <div>Already Have an account?
-                <a href="/login">Login</a>
-            </div>
+    <div class="registration-box-inner">
+        <div class="background">
+            <div class="shape"></div>
+            <div class="shape"></div>
         </div>
+        <form id="register" action="/register" method="POST">
+            <h2>Registration</h2>
+            <label for="name">Name</label>
+            {% if name %}
+            <div class="textbox"><input type="text" placeholder="Name" name="name" value="{{name}}"></div>
+            {% else %}
+            <div class="textbox"><input type="text" placeholder="Name" name="name"></div>
+            {% endif %}
+            <label for="usernmae">Username</label>
+            {% if username %}
+            <div class="textbox"><input type="text" placeholder="Username" name="username" value="{{username}}"></div>
+            {% else %}
+            <div class="textbox"><input type="text" placeholder="Username" name="username"></div>
+            {% endif %}
+            <label for="email">Email</label>
+            {% if email %}
+            <div class="textbox"><input type="email" placeholder="Email Id" name="email" value="{{email}}"></div>
+            {% else %}
+            <div class="textbox"><input type="email" placeholder="Email Id" name="email"></div>
+            {% endif %}
+            <label for="alamat">Alamat</label>
+            {% if alamat %}
+            <div class="textbox"><input type="text" placeholder="Alamat" name="alamat" value="{{alamat}}"></div>
+            {% else %}
+            <div class="textbox"><input type="text" placeholder="Alamat" name="alamat"></div>
+            {% endif %}
+            <label for="nohp">No. HP</label>
+            {% if nohp %}
+            <div class="textbox"><input type="text" placeholder="No. HP" name="nohp" value="{{nohp}}"></div>
+            {% else %}
+            <div class="textbox"><input type="text" placeholder="No. HP" name="nohp"></div>
+            {% endif %}
+            <label for="lahiruser">Tanggal Lahir</label>
+            {% if lahiruser %}
+            <div class="textbox"><input type="date" placeholder="Tanggal Lahir" name="birthdate" value="{{birthdate}}"></div>
+            {% else %}
+            <div class="textbox"><input type="date" placeholder="birthdate" name="birthdate"></div>
+            {% endif %}
+            <label for="password">Password</label>
+            <div class="textbox"><input type="password" placeholder="Password" name="password"></div>
+            {% if msg %}
+            {{ msg }}
+            {% endif %}
+            <input class="btn" type="submit" value="Sign Up">
+            <div class="additional-button">
+                <div>Already Have an account?
+                    <a href="/login">Login</a>
+                </div>
+            </div>
+        </form>
     </div>
 </body>
 </html>

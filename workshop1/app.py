@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import (Flask, render_template, request, redirect, session, url_for) 
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -10,6 +10,9 @@ mysql = MySQL(app)
 
 app.secret_key = 'abcdefghijklmnopqrstuvwxyz'
 
+@app.before_first_request
+def awalan():
+    session['loged'] = False
 
 @app.route('/')
 @app.route('/start')
@@ -19,24 +22,28 @@ def start():
 
 @app.route('/logout')
 def logout():
-    session['loggedin'] = False
+    session.pop('username',None)
+    session.pop('iduser',None)
+    session['loged'] = False
     return redirect('/login')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        
         username = request.form['username']
         password = request.form['password']
+
         cursor = mysql.connection.cursor()
+        cursor.execute("SELECT IdUser FROM user_accounts WHERE username=%s",(username,))
+        iduser = cursor.fetchall()
         if cursor.execute(' SELECT * FROM user_accounts WHERE username=%s or password=%s ', (username, password)):
             if cursor.execute(' SELECT * FROM user_accounts WHERE username=%s and password=%s ', (username, password)):
-                account = cursor.fetchone()
-                session['loggedin'] = True
-                session['id'] = account[0]
-                session['name'] = account[1]
-                session['username'] = account[3]
-                return redirect('/home1')
+                session['loged'] = True
+                session['username'] = username
+                session['iduser'] = iduser
+                return redirect(url_for('home'))
             elif cursor.execute(' SELECT * FROM user_accounts WHERE username=%s ', (username,)):
                 return render_template('login.html', msg="Wrong password", username=username)
             else:
@@ -47,21 +54,20 @@ def login():
         return render_template('login.html')
 
 
-@app.route('/home1')
-def home1():
-    if session['loggedin']:
-        return redirect('/home')
-    else:
-        return f"Please login in"
-
-
 @app.route('/home')
 def home():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM product_details ORDER BY dates DESC LIMIT 10")
-    rv = cur.fetchall()
-    cur.close()
-    return render_template('home.html', data=rv)
+    cond = session['loged']
+    if cond == True:
+        iduser = session['iduser']
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM product_details ORDER BY dates DESC LIMIT 10")
+        rv = cur.fetchall()
+        cur.execute("SELECT * FROM user_accounts WHERE IdUser=%s",(iduser,))
+        us = cur.fetchall()
+        cur.close()
+        return render_template('home.html', data=rv,user=us)
+    else:
+        return render_template('nicetry.html')
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -83,7 +89,7 @@ def register():
             elif cur.execute(" SELECT * FROM user_accounts WHERE username=%s ", (username,)):
                 return render_template('register.html', msg="Username already exists,try another username", name=name, email=email)
         else:
-            cur.execute(" INSERT INTO user_accounts (Name,Username,Email,Alamat,NoHP,Birthdate,Password,registration_date) VALUES(%s,%s,%s,%s,%s,%s,%s,now()) ",
+            cur.execute(" INSERT INTO user_accounts (Name,idUser,Username,Email,Alamat,NoHP,Birthdate,Password,registration_date) VALUES(%s, FLOOR(RAND()*(9999-1000+1))+1000,%s,%s,%s,%s,%s,%s,now()) ",
                         (name, username, email, alamat, nohp, birthdate, password))
         mysql.connection.commit()
         return render_template('login.html')
@@ -96,52 +102,111 @@ def forget_password():
     return render_template('forget_password.html')
 
 
-"""@app.route('/simpan', methods=["POST"])
-def simpan():
-    link = request.form['linkfoto']
-    nama = request.form['nama']
-    harga = request.form['harga']
-    beli = request.form['beli']
-    berat = request.form['berat']
-    desc = request.form['deskripsi']
-    rate = request.form['rating']
+@app.route('/details/<string:id_data>', methods=["GET"])
+def details(id_data):
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO product_details VALUES (NULL, now(), %s,%s,%s,%s,%s,%s,%s)",
-                (link, nama, harga, beli, berat, desc, rate,))
-    mysql.connection.commit()
-    return redirect(url_for('home'))
+    cur.execute(
+        "SELECT * FROM product_details JOIN user_accounts ON product_details.IdUser=user_accounts.IdUser WHERE product_name=%s", 
+        (id_data,))
+    det = cur.fetchall()
+    return render_template('details.html', det=det)
 
+@app.route('/detailprofile', methods=["GET"])
+def detailsprofile():
+    iduser = session['iduser']
+    cur = mysql.connection.cursor()
+    cur.execute(
+        "SELECT * FROM user_accounts WHERE IdUser=%s", (iduser,))
+    det = cur.fetchall()
+    return render_template('detailprofile.html',user=det)
 
 @app.route('/update', methods=["POST"])
 def update():
     id_data = request.form['id']
     nama = request.form['nama']
+    alamat = request.form['alamat']
+    email = request.form['email']
+    hp = request.form['hp']
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE user_accounts SET Name=%s, Alamat=%s, Email=%s, NoHP=%s WHERE Username=%s",
+                (nama, alamat, email, hp, id_data,))
+    mysql.connection.commit()
+    return redirect(url_for('detailprofile'))
+
+@app.route('/updateitem', methods=["POST"])
+def updateitem():
+    id_data = request.form['id']
+    nama = request.form['nama']
     harga = request.form['harga']
     berat = request.form['berat']
     desc = request.form['desc']
+    link = request.form['foto']
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE product_details SET product_name=%s, price=%s, weight=%s, description=%s WHERE num=%s",
-                (nama, harga, berat, desc, id_data,))
+    cur.execute("UPDATE product_details SET product_name=%s, price=%s, weight=%s, description=%s,photo=%s WHERE IdProduct=%s",
+                (nama, harga, berat, desc,link, id_data,))
     mysql.connection.commit()
-    return redirect(url_for('home'))
+    return redirect(url_for('prodlist'))
 
+@app.route('/prodlist', methods=["GET"])
+def prodlist():
+    iduser = session['iduser']
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM product_details WHERE IdUser=%s ORDER BY product_name ASC",
+                (iduser,))
+    item = cur.fetchall()
+    cur.execute("SELECT * FROM user_accounts WHERE IdUser=%s",
+                (iduser,))
+    user=cur.fetchall()
+    cur.close()
+    return render_template('productlist.html',item=item,user=user)
 
 @app.route('/hapus/<string:id_data>', methods=["GET"])
 def hapus(id_data):
     cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM product_details WHERE product_name=%s", (id_data,))
+    cur.execute("DELETE FROM product_details WHERE idProduct=%s", (id_data,))
+    mysql.connection.commit()
+    return redirect(url_for('prodlist'))
+
+@app.route('/simpan',methods=["POST"])
+def simpan():
+    id_data = request.form['id']
+    uname = request.form['uname']
+    link = request.form['foto']
+    nama = request.form['nama']
+    harga = request.form['harga']
+    berat = request.form['berat']
+    desc = request.form['deskripsi']
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO product_details VALUES (FLOOR(RAND()*(99999-10000+1))+10000,%s,%s,now(),%s,%s,%s,0,%s,%s,0)",
+                (id_data,uname,link,nama,harga,berat,desc,))
+    mysql.connection.commit()
+    return redirect(url_for('prodlist'))
+
+@app.route('/cart')
+def cart():
+    iduser = session['iduser']
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM detail_cart RIGHT JOIN product_details ON detail_cart.IdProduct=product_details.IdProduct WHERE IdCart=(SELECT IdCart FROM cart WHERE IdUser = %s);", (iduser,))
+    cart=cur.fetchall()
+    return render_template('cart.html',cart=cart)
+
+@app.route('/addCart', methods=["POST"])
+def addCart():
+    iduser = session['iduser']
+    id_data = request.form['id']
+    quantity = request.form['items']
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE product_details SET stock=stock-%s WHERE IdProduct = %s;", (quantity,id_data,))
+    cur.execute("INSERT INTO detail_cart VALUES (FLOOR(RAND()*(99999-10000+1))+10000, (SELECT IdCart FROM cart WHERE IdUser = %s), %s, %s,%s)", (iduser,iduser,id_data,quantity,))
     mysql.connection.commit()
     return redirect(url_for('home'))
 
-
-@app.route('/details/<string:id_data>', methods=["GET"])
-def details(id_data):
+@app.route('/hapuscart/<string:id_data>', methods=["GET"])
+def hapuscart(id_data):
     cur = mysql.connection.cursor()
-    cur.execute(
-        "SELECT * FROM product_details WHERE product_name=%s", (id_data,))
-    det = cur.fetchall()
-    return render_template('details.html', det=det)
-"""
+    cur.execute("DELETE FROM detail_cart WHERE IdDetailCart=%s", (id_data,))
+    mysql.connection.commit()
+    return redirect(url_for('cart'))
 
 if __name__ == '__main__':
     app.run(debug=True)

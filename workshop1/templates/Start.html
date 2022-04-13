@@ -8,11 +8,22 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
 </head>
 <body>
-    <div class="home-box-outer">
-        <div class="home-box-inner">
-            <h1>Welcome</h1>
-            <button class="btn" onclick="document.location='login'">Login</button>
-            <button class="btn" onclick="document.location='register'">Register</button>
+    <div class="container">
+        <div class="start">
+            <div class="left-panel">
+                <img id="logo" src="https://i.ibb.co/VwLnLYp/5hopping-1.png" alt="Logo Pentashop">
+                <h2>Pentashop</h2>
+                <button class="btn" onclick="document.location='login'">Login</button>
+                <button class="btn" onclick="document.location='register'">Register</button>
+            </div>
+            <div class="right-panel">
+                <img class="starting-image" src="https://i.ibb.co/0fmbJ7Z/Group-4.png" alt="Starting-Image"/>
+                <h2>Find Your Needs</h2>
+                <p>Welcome to the Pentashop</p>
+            </div>
+        </div>
+        <div id="upper-background">
+
         </div>
     </div>
 </body>

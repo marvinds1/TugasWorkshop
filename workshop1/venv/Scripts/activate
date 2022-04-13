@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\lenovo\Documents\GitHub\TugasWorkshop\workshop1\venv"
+VIRTUAL_ENV="E:\Nandito\Kuliah\Workshop RPL\workshop1\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
