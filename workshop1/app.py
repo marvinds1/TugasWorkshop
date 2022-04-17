@@ -213,8 +213,8 @@ def addCart():
     if cur.execute("UPDATE product_details SET stock=stock-%s WHERE IdProduct = %s AND stock>=%s;", (quantity, id_data, quantity,)):
         cur.execute("UPDATE product_details SET stock=stock-%s WHERE IdProduct = %s AND stock>=%s;",
                     (quantity, id_data, quantity,))
-        cur.execute("INSERT INTO detail_cart VALUES (FLOOR(RAND()*(99999-10000+1))+10000, (SELECT IdCart FROM cart WHERE IdUser = %s), %s, %s,%s)",
-                    (iduser, iduser, id_data, quantity,))
+        cur.execute("INSERT INTO detail_cart VALUES (FLOOR(RAND()*(99999-10000+1))+10000, (SELECT IdCart FROM cart WHERE IdUser = %s), %s,%s)",
+                    (iduser, id_data, quantity,))
         mysql.connection.commit()
         return redirect(url_for('cart'))
     else:
@@ -238,4 +238,4 @@ def hapuscart(id_data):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, host='0.0.0.0')
