@@ -8,14 +8,14 @@
             <img src="{{ col.4 }}" class="rounded mx-auto d-block" style="width:200px;height:200px;"> </br>
         </div>
         <div class="col-lg-5 ps-lg-4 order-1 order-lg-2">
-            <h1>{{ col.5 }}</h1>
+            <h1>{{ col.5 }}</h1> 
             <div class="text-muted text-uppercase text-sm"> {{ col.12 }}</div><br>
             <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between mb-4">
                 <div class="list-inline mb-2 mb-sm-0">
                     Rp {{ col.6 }}
                 </div>
                 <div class="d-flex align-items-center">
-                    <div class="list-inline me-2 mb-0">{{ col.10 }}/5</div>
+                    <div class="list-inline me-2 mb-0">{{ col.10 }}/5</div> 
                     <div class="text-muted text-uppercase text-sm"> {{ col.7 }} sold</div>
                 </div>
             </div>
@@ -26,59 +26,31 @@
             </div>
             <div class="mb-4">
                 <div class="fw-bold text-uppercase text-sm"> Stock</div>
-                {% if col.11 == 0 %}
-                <div class="text-muted text-uppercase text-sm"> Out of Stock</div>
-                {% else %}
                 <div class="text-muted text-uppercase text-sm"> {{ col.11 }}</div>
-                {% endif %}
             </div>
-                    <form action="{{ url_for('addCart') }}" method="POST">
-                        <div class="col-3 col-lg-3 mb-4">
-                            <div class="fw-bold">Quantity</div>
-                            <input class="form-control" name="items" type="number" value="1">
-                            <div id="text-field-container">
-                                <div id="editing-view-port"></div>
-                                <div pseudo="-webkit-inner-spin-button" id="spin"></div>
-                            </div>
-                            </input>
-                            <input type="hidden" name="id" value="{{ col.0 }}">
-                        </div>
-                        {% if col.11 == 0 %}
-                        <button class="btn btn-dark btn-lg mb-1" style="border-radius: 0 !important;" type="button" data-bs-toggle="modal" data-bs-target="#modalnostock">
-                            <i class="bi bi-cart-plus"></i>
-                            <label class="fw-normal fs-6" style="letter-spacing: 1px;">Add to Cart</label>
-                        </button>
-                        <div id="modalnostock" class="modal" tabindex="-1">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title">Out of Stock!</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                  <p>Stock barang sedang habis silakan kembali lain kali.</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        {% else %}
-                        <button class="btn btn-dark btn-lg mb-1" style="border-radius: 0 !important;" type="submit">
-                            <i class="bi bi-cart-plus"></i>
-                            <label class="fw-normal fs-6" style="letter-spacing: 1px;">Add to Cart</label>
-                        </button>
-                        {% endif %}
-                        {% if msg %}
-                        {{msg}}
-                        {% endif %}
-                    </form>
+            <form action="{{ url_for('addCart') }}" method="POST">
+            <div class="col-3 col-lg-3 mb-4">
+                <div class="fw-bold">Quantity</div>
+                <input class="form-control" name="items" type="number" value="1">
+                    <div id="text-field-container">
+                        <div id="editing-view-port"></div>
+                    <div pseudo="-webkit-inner-spin-button" id="spin"></div>
+                    </div>
+                </input> 
+                <input type="hidden" name="id" value="{{ col.0 }}">
+            </div>
+            <button class="btn btn-dark btn-lg mb-1" style="border-radius: 0 !important;" type="submit"> 
+                <i class="bi bi-cart-plus"></i>
+                <label class="fw-normal fs-6" style="letter-spacing: 1px;">Add to Cart</label> 
+            </button>
+        </form>
         </div>
     </div>
-
 </div>
 
 
 {% else %}
-</div>
-<h3>Unbelievable. No entries here so far</h3>
-{% endfor %}
+    </div>
+        <h3>Unbelievable. No entries here so far</h3>
+    {% endfor %}
 {% endblock %}
