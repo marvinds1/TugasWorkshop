@@ -91,3 +91,26 @@ INSERT INTO product_details VALUES
  "https://i.ibb.co/mSTHW7w/10.jpg", "Torch Sling Bag Kashiba – Dark Grey", 115000, 230, 200,
     "Varian baru dari Torch. Bagi Anda seorang petualang, pekerja yang aktif, maupun seorang traveller, miliki produk dari Torch dengan bahan nylon yang antiair dan kuat. Torch, dapat Anda percaya.",
     4.5);
+
+#update
+CREATE TABLE IF NOT EXISTS cart(
+    IdCart int not null, 
+    IdUser int not null,
+    PRIMARY KEY (IdCart)
+);
+CREATE TABLE IF NOT EXISTS detail_cart(
+    IdDetailCart int not null,
+    IdCart int not null, 
+    IdProduct int not null,
+    amount int not null,
+    PRIMARY KEY (IdDetailCart)
+);
+INSERT INTO cart VALUES
+(FLOOR(RAND()*(99999-10000+1))+10000,(SELECT IdUser FROM user_accounts WHERE Username = "rifqi"));
+INSERT INTO cart VALUES
+(FLOOR(RAND()*(99999-10000+1))+10000,(SELECT IdUser FROM user_accounts WHERE Username = "ferdi"));
+INSERT INTO cart VALUES
+(FLOOR(RAND()*(99999-10000+1))+10000,(SELECT IdUser FROM user_accounts WHERE Username = "nandito"));
+ALTER TABLE product_details
+ADD latitude FLOAT;
+ADD longitude FLOAT;

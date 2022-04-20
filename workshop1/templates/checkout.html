@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% block title %} Cart {% endblock %}
+{% block body %}
+
+<main class="page payment-page">
+    <section class="payment-form dark">
+      <div class="container">
+        <div class="block-heading">
+          <h2>Payment</h2>
+          <p>Berikut form pembayaran</br>Pastikan semua barang sudah benar, ya!</p>
+        </div>
+        <form>
+          <div class="products">
+            <h3 class="title">Order Detail</h3>
+            {% for item in cart %}
+            <div class="item">
+              <span class="price">
+                  Rp {{ item.10 }}
+                  <p class="item-description" style="font-weight:400;">Rp {{ item.10 * item.3}}</p>
+                </span>
+              <p class="item-name">{{ item.9 }}</p>
+              <p class="item-description">Amount : {{item.3}}</p>
+            </div>
+            {% else %}
+            {% endfor %}
+            {% if sum %}
+            <div class="total">Total<span class="price">Rp {{ sum.0.0 }}</span></div>
+            {% else %}
+            <div class="total">Total<span class="price">0</span></div>
+            {% endif %}
+          </div>
+          <div class="card-details">
+            <h3 class="title">Detail pembayaran</h3>
+            <div class="row">
+              <div class="form-group col-sm-7">
+                <label for="Kurirr">Kurir</label>
+                <select id="Kurir" class="form-select" aria-label="Card Holder" aria-describedby="basic-addon1">
+                    <option selected>Pilih kurir</option>
+                    {% for comp in kurir %}
+                    <option value={{comp.1}}>{{comp.1}}</option>
+                    {% else %}
+                    {% endfor %}
+                  </select>
+              </div>
+              <div class="form-group col-sm-5">
+                <label for="">Ongkos kirim</label>
+                <div class="input-group expiration-date">
+                    {% if ongkir %}
+                    <div class="total">Rp  {{ ongkir }}</span></div>
+                    {% else %}
+                    <div class="total">Rp  0</span></div>
+                    {% endif %}
+                </div>
+              </div>
+              <div class="form-group col-sm-7">
+                <label for="card-number"></label>
+                <p class="item-name">Total pembayaran: </p>
+              </div>
+              <div class="form-group col-sm-5">
+                <label for="cvc"></label>
+                {% if total %}
+                <div class="total">Rp  {{ total }}</span></div>
+                {% else %}
+                <div class="total">Rp  0</span></div>
+                {% endif %}
+              </div>
+              <div class="form-group col-sm-12">
+                <button type="button" class="btn btn-primary btn-block">Proceed</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+{% endblock %}
